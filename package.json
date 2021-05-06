@@ -7,7 +7,8 @@
     "serveSocket": "node src/socket.ts",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "npm run serve | npm run serveSocket"
+    "dev": "npm run serve | npm run serveSocket",
+    "start": "serve -s dist | npm run serveSocket"
   },
   "dependencies": {
     "core-js": "^3.6.5",
