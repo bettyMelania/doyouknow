@@ -16,7 +16,7 @@ class Store extends Vuex.Store<RootState> {
 
       mutations: {
         connectToSocket: (state)  => {
-          state.socketConnection = io('http://localhost:3000')
+          state.socketConnection = io(`${window.location.protocol}//${window.location.hostname}:3000`)
           state.socketConnection.on('test', (data) => {
             state.messages.push(data)
           })
