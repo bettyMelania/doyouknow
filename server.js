@@ -6,7 +6,7 @@ const socketIO = require('socket.io')
 //const sslRedirect = require('heroku-ssl-redirect')
 
 const app = express()
-app.use(cors())
+//app.use(cors())
 app.disable('x-powered-by')
 
 // const setupSSLRedirect = () => {
@@ -25,7 +25,8 @@ const startServer = () => {
     const server = app.listen(process.env.PORT || 3000, function() {
         console.log('Web app now running at ' + server.address().address + ':' + server.address().port)
     })
-    const io = socketIO(server, {cors: true});
+    const io = socketIO(server);
+
     io.on('connection', (socket) => {
         console.log('new connection')
 
