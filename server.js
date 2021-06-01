@@ -26,7 +26,7 @@ const startServer = () => {
         console.log('Web app now running at ' + server.address().address + ':' + server.address().port)
     })
     const io = socketIO(server);
-
+    console.log('io: ', io.engine.opts)
     io.on('connection', (socket) => {
         console.log('new connection')
 
