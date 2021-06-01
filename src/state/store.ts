@@ -16,8 +16,11 @@ class Store extends Vuex.Store<RootState> {
 
       mutations: {
         connectToSocket: (state)  => {
-          console.log('process.env.PORT ', process.env.PORT)
-          state.socketConnection = io.io(`${window.location.protocol}//${window.location.hostname}:${process.env.PORT || 3000}`)
+          // console.log('process.env.PORT ', process.env.VUE_APP_PORT)
+          // console.log('PORT ', window.location.port)
+          console.log('PORT ', window.location.origin)
+          //state.socketConnection = io.io(`${window.location.protocol}//${window.location.hostname}:${process.env.VUE_APP_PORT || 3000}`)
+          state.socketConnection = io.io(window.location.origin)
           state.socketConnection.on('test', (data) => {
             state.messages.push(data)
           })
