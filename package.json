@@ -9,7 +9,7 @@
     "heroku-postbuild": "npm run build",
     "lint": "vue-cli-service lint",
     "dev": "npm run serve | npm run serveSocket",
-    "start": "npm run serve -s dist | npm run serveSocket"
+    "start": "npm run serve"
   },
   "dependencies": {
     "core-js": "^3.6.5",
