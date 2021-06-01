@@ -25,8 +25,12 @@ const startServer = () => {
     const server = app.listen(process.env.PORT || 3000, function() {
         console.log('Web app now running at ' + server.address().address + ':' + server.address().port)
     })
-    const io = socketIO(server);
-    console.log('io: ', io.engine.opts)
+    const io = socketIO(server, {
+        cors: {
+            origin: 'https://doyouknowthis.herokuapp.com',
+            methods: ["GET", "POST"]
+        }
+    });
     io.on('connection', (socket) => {
         console.log('new connection')
 
