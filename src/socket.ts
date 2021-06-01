@@ -1,8 +1,11 @@
-const app  = require('express')()
-const server = require('http').createServer();
+const express = require('express')
+const socketIO = require('socket.io')
 
-const io = require('socket.io')(server, { cors: true });
-server.listen(process.env.SOCKET_PORT || 3000);
+const app = express().listen(process.env.PORT || 3000, function() {
+  console.log('SOCKET now running at ' + app.address().address + ':' + app.address().port)
+})
+
+const io = socketIO(app, { cors: true });
 
 io.on('connection', (socket) => {
   console.log('new connection')

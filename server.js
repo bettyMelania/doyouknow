@@ -1,9 +1,12 @@
 const express = require('express')
 const path = require('path')
+const cors = require('cors');
 const history = require('connect-history-api-fallback')
+const socketIO = require('socket.io')
 //const sslRedirect = require('heroku-ssl-redirect')
 
 const app = express()
+app.use(cors())
 app.disable('x-powered-by')
 
 // const setupSSLRedirect = () => {
@@ -19,9 +22,21 @@ const serveFrontend = () => {
 }
 
 const startServer = () => {
-  const server = app.listen(process.env.PORT || 8080, function() {
-    console.log('Web app now running at ' + server.address().address + ':' + server.address().port)
-  })
+    const server = app.listen(process.env.PORT || 3000, function() {
+        console.log('Web app now running at ' + server.address().address + ':' + server.address().port)
+    })
+    const io = socketIO(server, {cors: true});
+    io.on('connection', (socket) => {
+        console.log('new connection')
+
+        socket.on('disconnect', () => {
+            console.log('disconnected')
+        })
+
+        socket.on('message', (data) => {
+            io.emit('test', data)
+        })
+    })
 }
 
 const start = () => {
