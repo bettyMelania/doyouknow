@@ -6,9 +6,10 @@
     "serve": "vue-cli-service serve",
     "serveSocket": "node src/socket.ts",
     "build": "vue-cli-service build",
+    "heroku-postbuild": "npm run build",
     "lint": "vue-cli-service lint",
     "dev": "npm run serve | npm run serveSocket",
-    "start": "serve -s dist | npm run serveSocket"
+    "start": "npm run serve -s dist | npm run serveSocket"
   },
   "dependencies": {
     "core-js": "^3.6.5",
