@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import io from 'socket.io-client'
+import {QuizzService} from "@/service/quizz";
 
 export interface RootState {
   messages: string[],
@@ -16,11 +17,8 @@ class Store extends Vuex.Store<RootState> {
 
       mutations: {
         connectToSocket: (state)  => {
-          // console.log('process.env.PORT ', process.env.VUE_APP_PORT)
-          // console.log('PORT ', window.location.port)
-          console.log('PORT ', window.location.origin)
-          //state.socketConnection = io.io(`${window.location.protocol}//${window.location.hostname}:${process.env.VUE_APP_PORT || 3000}`)
-          state.socketConnection = io.io(window.location.origin)
+          const url = window.location.origin.toString().includes('heroku') ? window.location.origin : 'localhost:3000'
+          state.socketConnection = io.io(url)
           state.socketConnection.on('test', (data) => {
             state.messages.push(data)
           })
@@ -28,6 +26,7 @@ class Store extends Vuex.Store<RootState> {
 
         addMessage: (state, msg) => {
           state.socketConnection.emit('message', msg)
+          QuizzService.addMessage(msg)
         },
       },
 

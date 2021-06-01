@@ -3,6 +3,7 @@ const path = require('path')
 const cors = require('cors');
 const history = require('connect-history-api-fallback')
 const socketIO = require('socket.io')
+const bodyParser = require('body-parser')
 //const sslRedirect = require('heroku-ssl-redirect')
 
 const app = express()
@@ -25,12 +26,7 @@ const startServer = () => {
     const server = app.listen(process.env.PORT || 3000, function() {
         console.log('Web app now running at ' + server.address().address + ':' + server.address().port)
     })
-    const io = socketIO(server, {
-        cors: {
-            origin: 'https://doyouknowthis.herokuapp.com',
-            methods: ["GET", "POST"]
-        }
-    });
+    const io = socketIO(server, { cors: true });
     io.on('connection', (socket) => {
         console.log('new connection')
 
@@ -44,10 +40,42 @@ const startServer = () => {
     })
 }
 
+const API_BASE_PATH = '/api'
+const whitelist = ['doyouknowthis', 'localhost']
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin) {
+            callback(null, true)
+            return
+        }
+
+        if (whitelist.some((allowedPath) => origin.includes(allowedPath))) callback(null, true)
+        else {
+            console.error('origin', origin)
+            callback('Not allowed')
+        }
+    }
+}
+const { addQuizz } = require('./api/quizz.js')
+const setupApi = () => {
+    const router = express.Router()
+    app.use(bodyParser.urlencoded({ extended: false }))
+    app.use(bodyParser.text())
+    app.use(bodyParser.json())
+
+    router.get(`${API_BASE_PATH}/quizz/`, cors(corsOptions), async (request, response) => {
+        const resp = await addQuizz(request.query)
+        if (resp) response.send(resp)
+        else response.send(null)
+    })
+    app.use('/', router)
+}
+
 const start = () => {
   //setupSSLRedirect()
-  serveFrontend()
-  startServer()
+    if(process.env.PORT) serveFrontend()
+    startServer()
+    setupApi()
 }
 
 start()
