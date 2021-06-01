@@ -2,7 +2,7 @@ const app  = require('express')()
 const server = require('http').createServer();
 
 const io = require('socket.io')(server, { cors: true });
-server.listen(process.env.PORT || 3000);
+server.listen(process.env.SOCKET_PORT || 3000);
 
 io.on('connection', (socket) => {
   console.log('new connection')
